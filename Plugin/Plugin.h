@@ -31,6 +31,7 @@ THE SOFTWARE.
 @interface CTFClickToFlashPlugin : NSView <WebPlugInViewFactory> {
     DOMElement *_container;
     NSString *_host;
+    NSImage *_overlay;
 }
 
 + (NSView *)plugInViewWithArguments:(NSDictionary *)arguments;
@@ -39,5 +40,6 @@ THE SOFTWARE.
 
 @property (retain) DOMElement *container;
 @property (retain) NSString *host;
+@property (retain) NSImage *overlay;
 
 @end

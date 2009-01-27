@@ -66,6 +66,9 @@ static NSString *sHostWhitelistDefaultsKey = @"ClickToFlash.whitelist";
             if ([self _isHostWhitelisted]) {
                 [self performSelector:@selector(_convertTypesForContainer) withObject:nil afterDelay:0];
             }
+
+            NSString* overlayPath = [[NSBundle bundleForClass:[self class]] pathForResource:@"Overlay.png" ofType:nil];
+            self.overlay = [[[NSImage alloc] initWithContentsOfFile:overlayPath] autorelease];
         }
     }
     
@@ -77,6 +80,7 @@ static NSString *sHostWhitelistDefaultsKey = @"ClickToFlash.whitelist";
 {
     self.container = nil;
     self.host = nil;
+    self.overlay = nil;
     [super dealloc];
 }
 
@@ -147,6 +151,23 @@ static NSString *sHostWhitelistDefaultsKey = @"ClickToFlash.whitelist";
     [[NSBezierPath bezierPathWithRect:strokeRect] stroke];
 
     [gradient release];
+    
+    
+    // Draw an overlay image to help distinguish the plain gradient
+    NSRect overlayRect;
+    overlayRect.size = [self.overlay size];
+    // Scale the image down if it doesn't fit
+    if (overlayRect.size.width > NSWidth(selfBounds)) {
+        overlayRect.size.height *= NSWidth(selfBounds)/overlayRect.size.width;
+        overlayRect.size.width = NSWidth(selfBounds);
+    }
+    if (overlayRect.size.height > NSHeight(selfBounds)) {
+        overlayRect.size.width *= NSHeight(selfBounds)/overlayRect.size.height;
+        overlayRect.size.height = NSHeight(selfBounds);
+    }
+    // Place it in the center of the view
+    overlayRect.origin = NSMakePoint((NSWidth(selfBounds)-NSWidth(overlayRect))/2, (NSHeight(selfBounds)-NSHeight(overlayRect))/2);
+    [self.overlay drawInRect:overlayRect fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0];
 }
 
 
@@ -192,5 +213,6 @@ static NSString *sHostWhitelistDefaultsKey = @"ClickToFlash.whitelist";
 
 @synthesize container = _container;
 @synthesize host = _host;
+@synthesize overlay = _overlay;
 
 @end
