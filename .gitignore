@@ -1,0 +1,5 @@
+build
+coverage
+.DS_Store
+*.xcodeproj/*.mode*
+*.xcodeproj/*.pbxuser
